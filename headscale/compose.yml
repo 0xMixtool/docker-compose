@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  headscale:
+    container_name: headscale
+    image: headscale/headscale:latest
+    restart: always
+    volumes:
+      - ./:/etc/headscale
+    command: headscale serve
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.headscale.entrypoints=https
+      - traefik.http.routers.headscale.tls=true
+      - traefik.http.routers.headscale.rule=Host(`p2p.dev.run`)
+      - traefik.http.services.headscale.loadbalancer.server.port=8080
+  headscale_ui:
+    container_name: headscale_ui
+    image: ghcr.io/gurucomputing/headscale-ui:latest
+    restart: always
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.headscale_ui.entrypoints=https
+      - traefik.http.routers.headscale_ui.tls=true
+      - traefik.http.routers.headscale_ui.middlewares=digestauth
+      - traefik.http.routers.headscale_ui.rule=Host(`p2p.dev.run`) && PathPrefix(`/web`)
+      - traefik.http.services.headscale_ui.loadbalancer.server.port=80
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

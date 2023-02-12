@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  huginn:
+    container_name: huginn
+    image: huginn/huginn
+    restart: always
+    environment:
+      DATABASE_HOST: xxx.xxx.xxx.xxx
+      DATABASE_PORT: xxxx
+      DATABASE_NAME: huginn
+      DATABASE_USERNAME: huginn
+      DATABASE_PASSWORD: xxxxxxxxxxxxxxxx
+      DATABASE_ENCODING: utf8mb4
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.huginn.entrypoints=https
+      - traefik.http.routers.huginn.tls=true
+      - traefik.http.routers.huginn.rule=Host(`huginn.dev.run`)
+      - traefik.http.services.huginn.loadbalancer.server.port=3000
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

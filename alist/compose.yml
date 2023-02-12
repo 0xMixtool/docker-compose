@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  alist:
+    container_name: alist
+    restart: unless-stopped
+    image: xhofe/alist:latest
+    volumes:
+      - /app/alist:/opt/alist/data
+    environment:
+      - PUID=0
+      - PGID=0
+      - UMASK=022
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.alist.entrypoints=https
+      - traefik.http.routers.alist.tls=true
+      - traefik.http.routers.alist.rule=Host(`alist.dev.run`)
+      - traefik.http.services.alist.loadbalancer.server.port=5244
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

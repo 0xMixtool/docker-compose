@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    volumes:
+      - ./mongod.conf:/etc/mongo/mongod.conf
+      - ./db:/data/db
+      - ./configdb:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: xxxxxxxxxxxxxxxx
+    labels:
+      - traefik.enable=true
+      - traefik.tcp.routers.mongo.entrypoints=mongo
+      - traefik.tcp.routers.mongo.tls=true
+      - traefik.tcp.routers.mongo.rule=HostSNI(`mongo.dev.run`)
+      - traefik.tcp.services.mongo.loadbalancer.server.port=27017
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
