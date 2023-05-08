@@ -10,6 +10,9 @@ services:
       - ./:/var/lib/grafana
     environment:
       - GF_LOG_MODE=console
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_NAME=DEV
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
     labels:
       - traefik.enable=true
       - traefik.http.routers.grafana.entrypoints=https

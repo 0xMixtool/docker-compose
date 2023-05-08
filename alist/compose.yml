@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     image: xhofe/alist:latest
     volumes:
-      - /app/alist:/opt/alist/data
+      - ./:/opt/alist/data
     environment:
       - PUID=0
       - PGID=0
