@@ -1,4 +1,0 @@
-tls:
-  certificates:
-    - certFile: /config/tls/dev.run.crt
-      keyFile: /config/tls/dev.run.key
